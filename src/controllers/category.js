@@ -91,8 +91,7 @@ categoryController.get = async function (req, res, next) {
 	const stop = start + userSettings.topicsPerPage - 1;
 
 	const sort = validSorts.includes(req.query.sort) ? req.query.sort : userSettings.categoryTopicSort;
-
-	const categoryData = await categories.getCategoryById({
+	const categoryDataPromise = categories.getCategoryById({
 		uid: req.uid,
 		cid: cid,
 		start: start,
@@ -103,6 +102,7 @@ categoryController.get = async function (req, res, next) {
 		tag: req.query.tag,
 		targetUid: targetUid,
 	});
+	const categoryData = await categoryDataPromise;
 	if (!categoryData) {
 		return next();
 	}
@@ -124,10 +124,10 @@ categoryController.get = async function (req, res, next) {
 	await Promise.all([
 		buildBreadcrumbs(req, categoryData),
 		categories.setUnread([categoryData], allCategories.map(c => c.cid).concat(cid), req.uid),
+		categoryData.children.length ? categories.getRecentTopicReplies(allCategories, req.uid, req.query) : null,
 	]);
 
 	if (categoryData.children.length) {
-		await categories.getRecentTopicReplies(allCategories, req.uid, req.query);
 		categoryData.subCategoriesLeft = Math.max(0, categoryData.children.length - categoryData.subCategoriesPerPage);
 		categoryData.hasMoreSubCategories = categoryData.children.length > categoryData.subCategoriesPerPage;
 		categoryData.nextSubCategoryStart = categoryData.subCategoriesPerPage;

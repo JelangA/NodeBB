@@ -9,7 +9,7 @@ export const options = {
 const Alpine_host = "172.26.80.1:4567"
 const Windows_host = "localhost:4567"
 export default function() {
-  let res = http.get(`http://${host}/api/v3/categories`);
+  let res = http.get(`http://172.26.80.1:4567/api/category/1/announcements`);
   expect.soft(res.status).toBe(200);
   sleep(1);
 }
