@@ -287,7 +287,7 @@ define('composer/tags', ['api', 'alerts', 'translator'], function (api, alerts, 
         container.empty();
         
         if (!filteredTags.length) {
-            container.html(`<p class="text-center">No matching tags found${searchTerm ? ' for "' + searchTerm + '"' : ''}</p>`);
+            container.html(`<p class="text-center">No matching tags found${searchTerm ? ' for "' + searchTerm + '"' : ''} - Click \`Enter\` to add a new tag</p>`);
             return;
         }
         
