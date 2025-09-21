@@ -1,0 +1,9 @@
+services:
+  k6:
+    image: grafana/k6
+    container_name: k6
+    volumes:
+      - ./scripts:/scripts
+      - ./results:/results
+    working_dir: /scripts
+    entrypoint: ["k6"]
